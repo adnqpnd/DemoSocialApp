@@ -57,7 +57,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     }
 
     private void setupMVP(){
-        mLoginPresenter = PresenterHolder.getInstance(getActivityContext()).getPresenter(LoginContract.Presenter.class);
+        mLoginPresenter = PresenterHolder.getInstance().getPresenter(LoginContract.Presenter.class);
 
         Log.d(TAG, "setupMVP: mLoginPresenter - " +mLoginPresenter);
 
@@ -70,20 +70,21 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             LoginPresenter loginPresenter = (LoginPresenter) mLoginPresenter;
             LoginModel loginModel = new LoginModel(loginPresenter);
             loginPresenter.setModel(loginModel);
+            loginPresenter.setView(this);
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        PresenterHolder.getInstance(getActivityContext()).putPresenter(LoginContract.Presenter.class, mLoginPresenter);
+        PresenterHolder.getInstance().putPresenter(LoginContract.Presenter.class, mLoginPresenter);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if(isFinishing()){
-            PresenterHolder.getInstance(getActivityContext()).remove(LoginContract.Presenter.class);
+            PresenterHolder.getInstance().remove(LoginContract.Presenter.class);
         }
     }
 

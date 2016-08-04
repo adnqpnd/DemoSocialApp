@@ -11,4 +11,5 @@ public interface BasePresenter {
     void destroy();
     Context getActivityContext();
     Context getApplicationContext();
+    void setView(BaseView view);
 }

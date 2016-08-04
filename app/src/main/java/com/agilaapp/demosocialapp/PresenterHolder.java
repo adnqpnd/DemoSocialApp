@@ -7,19 +7,17 @@ import java.util.Map;
 
 public class PresenterHolder {
     private static PresenterHolder sPresenterHolder = null;
-    private Context mContext;
     private Map<Class, BasePresenter> presenterMap;
 
-    public static PresenterHolder getInstance(Context context){
+    public static PresenterHolder getInstance(){
         if(sPresenterHolder == null){
-            sPresenterHolder = new PresenterHolder(context);
+            sPresenterHolder = new PresenterHolder();
         }
 
         return sPresenterHolder;
     }
 
-    private PresenterHolder(Context context){
-        mContext = context;
+    private PresenterHolder(){
         presenterMap = new HashMap<>();
     }
 

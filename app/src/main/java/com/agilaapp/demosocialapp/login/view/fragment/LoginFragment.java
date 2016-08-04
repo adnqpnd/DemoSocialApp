@@ -51,6 +51,23 @@ public class LoginFragment extends Fragment implements LoginContract.View {
         setupMVP();
     }
 
+    private void setupMVP(){
+        mLoginPresenter = PresenterHolder.getInstance().getPresenter(LoginContract.Presenter.class);
+        Log.d(TAG, "setupMVP: mLoginPresenter - " +mLoginPresenter);
+
+        if(mLoginPresenter == null){
+            LoginPresenter loginPresenter = new LoginPresenter(this);
+            LoginModel loginModel = new LoginModel(loginPresenter);
+            loginPresenter.setModel(loginModel);
+            mLoginPresenter = loginPresenter;
+        }else {
+            LoginPresenter loginPresenter = (LoginPresenter) mLoginPresenter;
+            LoginModel loginModel = new LoginModel(loginPresenter);
+            loginPresenter.setModel(loginModel);
+        }
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,22 +90,14 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        PresenterHolder.getInstance(getActivityContext()).putPresenter(LoginFragment.class, mLoginPresenter);
+        PresenterHolder.getInstance().putPresenter(LoginFragment.class, mLoginPresenter);
     }
 
-    private void setupMVP(){
-        mLoginPresenter = PresenterHolder.getInstance(getActivityContext()).getPresenter(LoginContract.Presenter.class);
-        Log.d(TAG, "setupMVP: mLoginPresenter - " +mLoginPresenter);
-
-        if(mLoginPresenter == null){
-            LoginPresenter loginPresenter = new LoginPresenter(this);
-            LoginModel loginModel = new LoginModel(loginPresenter);
-            loginPresenter.setModel(loginModel);
-            mLoginPresenter = loginPresenter;
-        }else {
-            LoginPresenter loginPresenter = (LoginPresenter) mLoginPresenter;
-            LoginModel loginModel = new LoginModel(loginPresenter);
-            loginPresenter.setModel(loginModel);
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(getActivity().isFinishing()){
+            PresenterHolder.getInstance().remove(LoginContract.Presenter.class);
         }
     }
 

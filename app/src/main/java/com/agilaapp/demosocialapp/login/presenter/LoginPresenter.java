@@ -2,6 +2,7 @@ package com.agilaapp.demosocialapp.login.presenter;
 
 import android.content.Context;
 
+import com.agilaapp.demosocialapp.BaseView;
 import com.agilaapp.demosocialapp.login.LoginContract;
 import com.agilaapp.demosocialapp.UserSessionManager;
 
@@ -69,9 +70,9 @@ public class LoginPresenter implements LoginContract.Presenter {
         return getView().getApplicationContext();
     }
 
-
-    public void setView(LoginContract.View loginView) {
-
+    @Override
+    public void setView(BaseView view) {
+        mLoginView = new WeakReference<>((LoginContract.View)view);
     }
 
     public void setModel(LoginContract.Model loginModel){
