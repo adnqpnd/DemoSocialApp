@@ -10,12 +10,16 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.agilaapp.demosocialapp.BaseActivity;
+import com.agilaapp.demosocialapp.DemoSocialApplication;
 import com.agilaapp.demosocialapp.PresenterHolder;
 import com.agilaapp.demosocialapp.R;
+import com.agilaapp.demosocialapp.di.modules.LoginActivityModule;
 import com.agilaapp.demosocialapp.login.LoginContract;
 import com.agilaapp.demosocialapp.login.model.LoginModel;
 import com.agilaapp.demosocialapp.login.presenter.LoginPresenter;
 import com.agilaapp.demosocialapp.login.view.fragment.LoginFragment;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,7 +43,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     @BindView(R.id.progressBarLogin)
     ProgressBar mProgressBarLogin;
 
-    private LoginContract.Presenter mLoginPresenter;
+    @Inject
+    public LoginContract.Presenter mLoginPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,16 +67,20 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         Log.d(TAG, "setupMVP: mLoginPresenter - " +mLoginPresenter);
 
         if(mLoginPresenter == null){
-            LoginPresenter loginPresenter = new LoginPresenter(this);
-            LoginModel loginModel = new LoginModel(loginPresenter);
-            loginPresenter.setModel(loginModel);
-            mLoginPresenter = loginPresenter;
+            setupComponent();
         }else {
             LoginPresenter loginPresenter = (LoginPresenter) mLoginPresenter;
-            LoginModel loginModel = new LoginModel(loginPresenter);
-            loginPresenter.setModel(loginModel);
             loginPresenter.setView(this);
         }
+    }
+
+    private void setupComponent(){
+        Log.d(TAG, "setupComponent");
+        DemoSocialApplication
+                .get(this)
+                .getApplicationComponent()
+                .getLoginComponent(new LoginActivityModule(this))
+                .inject(this);
     }
 
     @Override
@@ -126,5 +135,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     @Override
     public Context getActivityContext() {
         return this;
+    }
+
+    @Override
+    public Context getDemoSocialApplicationContext() {
+        return this.getApplicationContext();
     }
 }

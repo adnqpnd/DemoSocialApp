@@ -142,7 +142,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     }
 
     @Override
-    public Context getApplicationContext() {
+    public Context getDemoSocialApplicationContext() {
         return getActivity().getApplicationContext();
     }
 

@@ -67,7 +67,7 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     @Override
     public Context getApplicationContext() {
-        return getView().getApplicationContext();
+        return getView().getDemoSocialApplicationContext();
     }
 
     @Override
